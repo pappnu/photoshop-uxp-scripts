@@ -1,11 +1,13 @@
 {
+  "type": "module",
   "scripts": {
-    "build": "tsc && node --experimental-transform-types tools/build.ts"
+    "build": "tsc && node --experimental-transform-types tools/build.ts",
+    "type-check": "tsc --noEmit && tsc --project tsconfig.tools.json --noEmit"
   },
   "devDependencies": {
-    "@types/node": "^24.1.0",
+    "@types/node": "^25.9.1",
     "@types/photoshop": "^25.0.4",
-    "prettier": "^3.6.2",
-    "typescript": "^5.9.2"
+    "prettier": "^3.8.3",
+    "typescript": "^6.0.3"
   }
 }
