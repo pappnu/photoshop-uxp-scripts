@@ -116,17 +116,21 @@ try {
       );
     }
 
-    const workGroup = await doc.createLayerGroup();
+    const wGroup = await doc.createLayerGroup();
+    if (!wGroup) throw new Error("Failed to create work group");
+    const workGroup = wGroup;
 
     const rasterizedSmartObjs: Layer[] = [];
     const lockedRasterizedSmartObjs: Layer[] = [];
 
     try {
       async function copyToWorkGroup(layer: Layer): Promise<Layer> {
-        return layer.duplicate(
+        const lyr = await layer.duplicate(
           workGroup,
           constants.ElementPlacement.PLACEINSIDE
         );
+        if (!lyr) throw new Error(`Failed to copy layer '${layer.name}' to work group`);
+        return lyr
       }
 
       async function rasterizeLayer(layer: Layer) {
@@ -216,6 +220,6 @@ try {
     { commandName: "Auto Align Smart Objects" }
   );
 } catch (error) {
-  navigator.clipboard.writeText(`${error}\n${error.stack}`);
+  navigator.clipboard.writeText(`${error}\n${error && typeof error === "object" && "stack" in error ? error.stack : ""}`);
   app.showAlert(`${error}\nSee system clipboard for possibly more details.`);
 }
